@@ -1,0 +1,40 @@
+name: JFrog OIDC Passwordless CI/CD
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  JF_URL: https://trialzy69c9.jfrog.io
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup JFrog CLI (OIDC)
+        uses: jfrog/setup-jfrog-cli@v4
+        with:
+          JF_URL: ${{ env.JF_URL }}
+          oidc-provider-name: krypto-data-github-oidc
+          oidc-audience: krypto-data-github-oidc
+
+      - name: Create dummy DLT manifest file
+        run: echo "KriptoStream DLT manifest - build ${{ github.run_number }}" > dlt-manifest.txt
+
+      - name: Upload artifact to Artifactory
+        run: jf rt upload dlt-manifest.txt krypto-data-npm-dev-local/dlt-manifest.txt --build-name=krypto-build --build-number=${{ github.run_number }}
+
+      - name: Collect environment variables
+        run: jf rt build-collect-env krypto-build ${{ github.run_number }}
+
+      - name: Collect Git metadata
+        run: jf rt build-add-git krypto-build ${{ github.run_number }}
+
+      - name: Publish Build Info
+        run: jf rt build-publish krypto-build ${{ github.run_number }}
