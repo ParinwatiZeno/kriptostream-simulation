@@ -9,6 +9,8 @@ permissions:
 
 env:
   JF_URL: https://trialzy69c9.jfrog.io
+  JFROG_CLI_BUILD_NAME: krypto-build
+  JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
 
 jobs:
   publish:
@@ -28,13 +30,13 @@ jobs:
         run: echo "KriptoStream DLT manifest - build ${{ github.run_number }}" > dlt-manifest.txt
 
       - name: Upload artifact to Artifactory
-        run: jf rt upload dlt-manifest.txt krypto-data-npm-dev-local/dlt-manifest.txt --build-name=krypto-build --build-number=${{ github.run_number }}
+        run: jf rt upload dlt-manifest.txt krypto-data-npm-dev-local/dlt-manifest.txt
 
       - name: Collect environment variables
-        run: jf rt build-collect-env krypto-build ${{ github.run_number }}
+        run: jf rt build-collect-env
 
       - name: Collect Git metadata
-        run: jf rt build-add-git krypto-build ${{ github.run_number }}
+        run: jf rt build-add-git
 
       - name: Publish Build Info
-        run: jf rt build-publish krypto-build ${{ github.run_number }} --project=krypto-data
+        run: jf rt build-publish --project=krypto-data
