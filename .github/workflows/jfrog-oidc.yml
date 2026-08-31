@@ -37,4 +37,4 @@ jobs:
         run: jf rt build-add-git krypto-build ${{ github.run_number }}
 
       - name: Publish Build Info
-        run: jf rt build-publish krypto-build ${{ github.run_number }}
+        run: jf rt build-publish krypto-build ${{ github.run_number }} --project=krypto-data
