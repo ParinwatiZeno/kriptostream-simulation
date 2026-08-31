@@ -1,0 +1,13 @@
+{
+  "name": "kriptostream-simulation",
+  "version": "1.0.0",
+  "description": "KriptoStream DLT data feed service simulation for JFrog PS journey",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "license": "UNLICENSED"
+}
